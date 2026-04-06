@@ -1,0 +1,4 @@
+car_price_model.pkl
+vehicles_clean.csv
+__pycache__/
+*.pyc
