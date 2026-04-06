@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Car Price Predictor</title>
+  <title> U.S-Based Car Price Predictor </title>
   <style> 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -23,7 +23,7 @@
       padding: 2rem;
       width: 100%;
       max-width: 600px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 40px rgba(139, 92, 246, 0.3);
     }
 
     h1 {
@@ -106,7 +106,7 @@
 
     .result .label {
       font-size: 0.85rem;
-      color: #16a34a;
+      color: #0dd9d2;
       font-weight: 500;
       margin-bottom: 0.25rem;
     }
@@ -114,13 +114,14 @@
     .result .price {
       font-size: 2rem;
       font-weight: 700;
-      color: #15803d;
+      color: #0dd9d2;
     }
 
     .error {
       margin-top: 1rem;
       padding: 0.75rem 1rem;
-      background: #fef2f2;
+      background: linear-gradient(135deg, #1a0533 0%, #3b0764 50%, #1a0533 100%);
+      min-height: 100vh;
       border: 1px solid #fecaca;
       border-radius: 8px;
       color: #dc2626;
@@ -132,12 +133,11 @@
 <body>
   <div class="card">
     <h1>Car Price Predictor</h1>
-    <p class="subtitle">Fill in the details below to get an estimated market price.</p>
-
+    <p class="subtitle">Fill in the details below to get an estimated market price. Best accuracy for vehicles between 1990–2021.</p>
     <div class="grid">
       <div class="field">
         <label>Year</label>
-        <input type="number" id="year" min="1990" max="2025" placeholder="e.g. 2018">
+        <input type="number" id="year" min="1990" max="2021" placeholder="e.g. 2018">
       </div>
 
       <div class="field">
