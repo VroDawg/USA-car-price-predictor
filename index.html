@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Price Predictor</title>
+  <style> 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: #111;
+    }
+
+    p.subtitle {
+      color: #888;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .field.full { grid-column: span 2; }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    input, select {
+      padding: 0.6rem 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      color: #111;
+      background: #fafafa;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #4f46e5;
+      background: white;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 0.85rem;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover { background: #4338ca; }
+    button:disabled { background: #a5b4fc; cursor: not-allowed; }
+
+    .result {
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+      text-align: center;
+      display: none;
+    }
+
+    .result .label {
+      font-size: 0.85rem;
+      color: #16a34a;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .result .price {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #15803d;
+    }
+
+    .error {
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      color: #dc2626;
+      font-size: 0.9rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Car Price Predictor</h1>
+    <p class="subtitle">Fill in the details below to get an estimated market price.</p>
+
+    <div class="grid">
+      <div class="field">
+        <label>Year</label>
+        <input type="number" id="year" min="1990" max="2025" placeholder="e.g. 2018">
+      </div>
+
+      <div class="field">
+        <label>Odometer (miles)</label>
+        <input type="number" id="odometer" placeholder="e.g. 45000">
+      </div>
+
+      <div class="field">
+        <label>Manufacturer</label>
+        <input type="text" id="manufacturer" placeholder="e.g. toyota">
+      </div>
+
+      <div class="field">
+        <label>Model</label>
+        <input type="text" id="model" placeholder="e.g. camry">
+      </div>
+
+      <div class="field">
+        <label>Fuel</label>
+        <select id="fuel">
+          <option value="gas">Gas</option>
+          <option value="diesel">Diesel</option>
+          <option value="hybrid">Hybrid</option>
+          <option value="electric">Electric</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Transmission</label>
+        <select id="transmission">
+          <option value="automatic">Automatic</option>
+          <option value="manual">Manual</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Drive</label>
+        <select id="drive">
+          <option value="fwd">FWD</option>
+          <option value="rwd">RWD</option>
+          <option value="awd">AWD</option>        
+          <option value="4wd">4WD</option>
+          <option value="unknown">Unknown</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Type</label>
+        <select id="type">
+          <option value="sedan">Sedan</option>
+          <option value="SUV">SUV</option>
+          <option value="truck">Truck</option>
+          <option value="coupe">Coupe</option>
+          <option value="hatchback">Hatchback</option>
+          <option value="van">Van</option>
+          <option value="wagon">Wagon</option>
+          <option value="convertible">Convertible</option>
+          <option value="pickup">Pickup</option>
+          <option value="mini-van">Mini-van</option>
+          <option value="unknown">Unknown</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Paint Color</label>
+        <select id="paint_color">
+          <option value="white">White</option>
+          <option value="black">Black</option>
+          <option value="silver">Silver</option>
+          <option value="blue">Blue</option>
+          <option value="red">Red</option>
+          <option value="grey">Grey</option>
+          <option value="green">Green</option>
+          <option value="yellow">Yellow</option>
+          <option value="orange">Orange</option>
+          <option value="brown">Brown</option>
+          <option value="purple">Purple</option>
+          <option value="custom">Custom</option>
+          <option value="unknown">Unknown</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Title Status</label>
+        <select id="title_status">
+          <option value="clean">Clean</option>
+          <option value="rebuilt">Rebuilt</option>
+          <option value="salvage">Salvage</option>
+          <option value="lien">Lien</option>
+          <option value="missing">Missing</option>
+          <option value="parts only">Parts Only</option>
+          <option value="unknown">Unknown</option>
+        </select>
+      </div>
+
+      <div class="field full">
+        <label>State (2-letter code)</label>
+        <input type="text" id="state" maxlength="2" placeholder="e.g. ca">
+      </div>
+    </div>
+
+    <button id="btn" onclick="predict()">Predict Price</button>
+
+    <div class="result" id="result">
+      <div class="label">Estimated Market Price</div>
+      <div class="price" id="price-output"></div>
+    </div>
+
+    <div class="error" id="error"></div>
+  </div>
+
+  <script>
+    async function predict() {
+      const btn = document.getElementById('btn');
+      const resultBox = document.getElementById('result');
+      const errorBox = document.getElementById('error');
+      const priceOutput = document.getElementById('price-output');
+
+      resultBox.style.display = 'none';
+      errorBox.style.display = 'none';
+      
+      const year = document.getElementById('year').value;
+      const odometer = document.getElementById('odometer').value;
+      const manufacturer = document.getElementById('manufacturer').value.trim();
+      const model = document.getElementById('model').value.trim();
+      const state = document.getElementById('state').value.trim();
+
+      if (!year || !odometer || !manufacturer || !model || !state) {
+        errorBox.textContent = 'Please fill in all fields before predicting.';
+        errorBox.style.display = 'block';
+        return;
+      }
+        
+      btn.disabled = true;
+      btn.textContent = 'Predicting...';
+
+      const payload = {
+        year: parseFloat(document.getElementById('year').value),
+        manufacturer: document.getElementById('manufacturer').value.toLowerCase().trim(),
+        model: document.getElementById('model').value.toLowerCase().trim(),
+        fuel: document.getElementById('fuel').value,
+        odometer: parseFloat(document.getElementById('odometer').value),
+        title_status: document.getElementById('title_status').value,
+        transmission: document.getElementById('transmission').value,
+        drive: document.getElementById('drive').value,
+        type: document.getElementById('type').value,
+        paint_color: document.getElementById('paint_color').value,
+        state: document.getElementById('state').value.toLowerCase().trim()
+      };
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        const formatted = '$' + data.predicted_price.toLocaleString('en-US', {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0
+        });
+
+        priceOutput.textContent = formatted;
+        resultBox.style.display = 'block';
+
+      } catch (err) {
+        errorBox.textContent = 'Could not connect to the API. Make sure uvicorn is running.';
+        errorBox.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Predict Price';
+      }
+    }
+  </script>
+</body>
+</html>
