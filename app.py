@@ -3,8 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
 import pandas as pd
-from sklearn.preprocessing import LabelEncoder
-import numpy as np
 
 app = FastAPI()
 
@@ -16,16 +14,10 @@ app.add_middleware(
 )
 
 model = joblib.load('car_price_model.pkl')
-df_ref = pd.read_csv('vehicles_clean.csv')
+encoders = joblib.load('encoders.pkl')
 
 cat_cols = ['manufacturer', 'model', 'fuel', 'title_status',
             'transmission', 'drive', 'type', 'paint_color', 'state']
-
-encoders = {}
-for col in cat_cols:
-    le = LabelEncoder()
-    le.fit(df_ref[col])
-    encoders[col] = le
 
 class CarFeatures(BaseModel):
     year: float
@@ -47,16 +39,15 @@ def root():
 @app.post("/predict")
 def predict(car: CarFeatures):
     input_dict = car.dict()
-    
+
     for col in cat_cols:
         val = input_dict[col]
         if val in encoders[col].classes_:
             input_dict[col] = encoders[col].transform([val])[0]
         else:
             input_dict[col] = 0
-    
+
     input_df = pd.DataFrame([input_dict])
     prediction = model.predict(input_df)[0]
-    
+
     return {"predicted_price": round(float(prediction), 2)}
-    
