@@ -3,7 +3,7 @@
 A machine learning web app that predicts used car prices based on vehicle features, limited between vehicles from 1990 up to 2021.
 
 ## Live Demo
-Frontend: https://vrodawg.github.io/USA-car-price-predictor
+Frontend: https://vrodawg.github.io/USA-car-price-predictor2026/
 
 API: https://usa-car-price-predictor.onrender.com/docs
 
